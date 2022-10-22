@@ -8,8 +8,10 @@ STORE_STORES = ['ALDO Centre Eaton', 'ALDO Destiny USA Mall', 'ALDO Pheasant Lan
 SHOES_MODELS = ['ADERI', 'MIRIRA', 'CAELAN', 'BUTAUD', 'SCHOOLER', 'SODANO', 'MCTYRE', 'CADAUDIA', 'RASIEN', 'WUMA', 'GRELIDIEN', 'CADEVEN', 'SEVIDE', 'ELOILLAN', 'BEODA', 'VENDOGNUS', 'ABOEN', 'ALALIWEN', 'GREG', 'BOZZA' ]
 INVENTORY = Array(0..100)
 RANDOMNESS = Array(1..3)
+p "running..."
 
 loop do
+  p "beating..."
   RANDOMNESS.sample.times do
     puts JSON.generate({
       store: STORE_STORES.sample,
