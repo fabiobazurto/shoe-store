@@ -41,16 +41,20 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function StoresBoard() {
   const [rowse, setRowse] = useState([]);
-  
+
+  const [statistics, setStatistics] = useState({});  
   // Used to detect websocket state
   const [serverMessage, setServerMessage] = useState("");
   const [webSocketReady, setWebSocketReady] = useState(false);
 
   //using useState so when socket updates it triggers a component rerender
-  const [webSocket, setWebSocket] = useState(new WebSocket("ws://localhost:8080/"));
+  const [webSocket, setWebSocket] = useState(new WebSocket("ws://127.0.0.1:8080/"));
 
   var rows=[];
 
+
+
+  
   useEffect(() => {
     webSocket.onopen = (event) => {
       setWebSocketReady(true);
@@ -58,7 +62,19 @@ export default function StoresBoard() {
 
     webSocket.onmessage = function (event) {
       var inventory_json = JSON.parse(event.data);
+      var store = inventory_json['store']
+      var model = inventory_json['model']
+      var inventory =  inventory_json['inventory']
+
+      if(statistics[store]){
+	statistics[store][model] = inventory;
+      }
+      else{
+	statistics[store] = { model: inventory };
+      }
+
       rows.unshift(new StoreShoeStock(inventory_json['store'], inventory_json['model'], inventory_json['inventory']))
+      rows = rows.slice(0, 10)
       setRowse(rows);
       setServerMessage(JSON.parse(event.data));
       console.log(rows);
@@ -84,7 +100,6 @@ export default function StoresBoard() {
   
   return (
     <Container>
-    <h1>Log</h1>
     <TableContainer >
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
