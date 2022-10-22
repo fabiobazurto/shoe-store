@@ -1,7 +1,8 @@
 import logo from './logo.svg';
-import StoresBoard from './components/StoresBoard/StoresBoard';
 import './App.css';
+
 import { makeStyles, createMuiTheme } from "@material-ui/core/styles";
+import Container from '@material-ui/core/Container';
 import { ThemeProvider } from "@material-ui/styles";
 import blue from "@material-ui/core/colors/blue";
 import {
@@ -17,12 +18,24 @@ import {
   Tab,
 } from "@material-ui/core";
 
-//sdfsdf
+//Routing
+import { Route, Routes } from "react-router-dom";
+
+//Components
+import Nav from "./components/Nav/Nav";
+import StoresBoard from './components/StoresBoard/StoresBoard';
+import About from './components/About/About';
+
+
 function App() {
   return (
-    <div>
-      <h1>sdfsdf</h1>
-    </div>
+    <div className="App">
+      <Nav />
+      <Routes>
+      <Route path="/" element={<StoresBoard />} />
+      <Route path="/log" element={<About />} />      
+      </Routes>
+      </div>
   );
 }
 

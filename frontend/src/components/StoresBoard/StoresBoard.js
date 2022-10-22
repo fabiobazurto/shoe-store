@@ -1,33 +1,114 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { styled } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 
-const useStyles = makeStyles(theme => ({
-  container: {
-    marginBottom: '5em'
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+//import Paper from '@material-ui/core/Paper';
+
+//import KeyboardArrowDownIcon from '@material-ui/icons-material/KeyboardArrowDown';
+//import KeyboardArrowUpIcon from '@material-ui/icons-material/KeyboardArrowUp';
+
+
+//model
+import { StoreShoeStock } from './../../models/store_shoe_stock';
+
+//  Component which uses drag-n-drop activation when clicking inside the component
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`th`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
   },
-  title: {
-    fontFamily: 'ApercuMedium',
-    marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(4),
-  }
+  [`tbody`]: {
+    fontSize: 14,
+  },
 }));
 
-function StoresBoard() {
-  const [count, setCount] = useState(0);
-  const classes = useStyles();
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
+
+export default function StoresBoard() {
+  const [rowse, setRowse] = useState([]);
+  
+  // Used to detect websocket state
+  const [serverMessage, setServerMessage] = useState("");
+  const [webSocketReady, setWebSocketReady] = useState(false);
+
+  //using useState so when socket updates it triggers a component rerender
+  const [webSocket, setWebSocket] = useState(new WebSocket("ws://localhost:8080/"));
+
+  var rows=[];
+
+  useEffect(() => {
+    webSocket.onopen = (event) => {
+      setWebSocketReady(true);
+    };
+
+    webSocket.onmessage = function (event) {
+      var inventory_json = JSON.parse(event.data);
+      rows.unshift(new StoreShoeStock(inventory_json['store'], inventory_json['model'], inventory_json['inventory']))
+      setRowse(rows);
+      setServerMessage(JSON.parse(event.data));
+      console.log(rows);
+    };
+
+    webSocket.onclose = function (event) {
+      setWebSocketReady(false);
+      setTimeout(() => {
+        setWebSocket(new WebSocket("ws://127.0.0.1:8080/"));
+      }, 1000);
+    };
+
+    webSocket.onerror = function (err) {
+      console.log('Socket encountered error: ', err.message, 'Closing socket');
+      setWebSocketReady(false);
+      webSocket.close();
+    };
+
+    return () => {
+       webSocket.close();
+    };
+  }, [webSocket]);
+  
   return (
-	  <Container>
-	  <div>
-	  <h1>board</h1>
-	  </div>
-	  </Container>
+    <Container>
+    <h1>Log</h1>
+    <TableContainer >
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow> 
+          <StyledTableCell><h3 align='left'>Stores</h3></StyledTableCell>
+          <StyledTableCell align="right">Shoes</StyledTableCell>
+          <StyledTableCell align="right">Total stock</StyledTableCell>
+          <StyledTableCell align="right"></StyledTableCell>	  
+        </TableRow>
+      </TableHead>
+      <TableBody>
+          {rowse.map((row) => (
+            <StyledTableRow>
+              <StyledTableCell  align="left" scope="row">
+                {row.store}
+              </StyledTableCell>
+              <StyledTableCell align="right">{row.model}</StyledTableCell>
+	      <StyledTableCell align="right">{row.inventory}</StyledTableCell>
+		  <StyledTableCell align="right"></StyledTableCell>
+            </StyledTableRow>
+          ))}
+        </TableBody>
+      </Table>
+      </TableContainer>
+      </Container>
   );
 }
-
-export default { StoresBoard }
-
-
