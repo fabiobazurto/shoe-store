@@ -1,7 +1,8 @@
 FactoryBot.define do
   factory :product do
-    name { "MyString" }
-    point_of_refill { 1 }
-    active { false }
+    name { Faker::Company.name }
+    total_units { 100 }
+    point_of_refill { 20 }
+    active { true }
   end
 end
