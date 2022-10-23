@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+.out-of-stock{
+    background-color:#ff0000 !important;
+}
+
+.good-stock{
+    background-color:#12D900;
+}
+
+.primary-nav{
+    margin:40px;
+}
+
+.primary-nav a{
+    margin-right: 20px;
+}

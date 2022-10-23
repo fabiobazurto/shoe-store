@@ -24,7 +24,7 @@ import { Route, Routes } from "react-router-dom";
 //Components
 import Nav from "./components/Nav/Nav";
 import StoresBoard from './components/StoresBoard/StoresBoard';
-import About from './components/About/About';
+import Dashboard from './components/Dashboard/Dashboard';
 
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
       <Nav />
       <Routes>
       <Route path="/" element={<StoresBoard />} />
-      <Route path="/log" element={<About />} />      
+      <Route path="/dashboard" element={<Dashboard />} />      
       </Routes>
       </div>
   );
