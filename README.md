@@ -1,5 +1,54 @@
 # Shoe Store
 
+## How to run
+
+### Frontend
+
+Configure your environment variables by editing ./frontend/src/contant.js file
+
+
+APP_API_BASE_URL  # You Api base url. By default http://localhost:3000/api/v1
+
+APP_WEBSOCKET_URL # You websocket url. By default  ws://127.0.0.1:8080/
+
+Run the following commands:
+
+```
+npm install
+npm start
+```
+
+
+
+### Backend
+
+Configure your database user and password
+
+```
+GRANT ALL PRIVILEGES ON *.* TO 'potloc'@'localhost' IDENTIFIED BY 'password'
+```
+
+Note: If you get some error with mysql2 gem on some debian-based distributions you could use these commands:
+
+```
+sudo apt-get install libmysqlclient-dev
+```
+
+Now its time to setup your rails app:
+
+```
+bundle install
+
+rails db:create
+rails db:migrate
+rails db:seed
+
+rails s
+```
+
+Test your api by using http://localhost:3000/stores
+
+
 ## Synopsis
 
 Aldo Shoes is having a huge flash sale online. You provide support to the inventory department. They want to react real-time to various inventory problems as they arise.
