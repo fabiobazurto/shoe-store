@@ -10,7 +10,7 @@ class StoresController < ApplicationController
         name: store.name,
         has_stock_problems: store.has_stock_problems,
         store_products: store.store_products.map{ |products|
-          { name: products.product.name, stock: products.stock }
+          { id: products.product_id, name: products.product.name, stock: products.stock }
         }
       }
     }

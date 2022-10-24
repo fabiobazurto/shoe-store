@@ -81,7 +81,6 @@ export default function Log() {
       rows = rows.slice(0, 10)
       setRowse(rows);
       setServerMessage(JSON.parse(event.data));
-      console.log(rows);
     };
 
     webSocket.onclose = function (event) {

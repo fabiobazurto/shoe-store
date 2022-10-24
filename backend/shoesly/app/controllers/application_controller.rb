@@ -1,7 +1,8 @@
 class ApplicationController < ActionController::API
-
-  def respond_with_not_found(error_message: 'Not found.')
-      format.json { render json: { error: error_message }, :status => :not_found }
+  rescue_from ActiveRecord::RecordNotFound, with: :respond_with_not_found
+  
+  def respond_with_not_found(message='Not found')
+     render json: { error: message }, :status => :not_found 
   end
 
   def respond_with_unprocessable_entity(error_message: 'Unprocessable Entity')

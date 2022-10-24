@@ -43,7 +43,6 @@ class Dashboard extends Component {
     this.stores.forEach( store=>{
       this.state.statistics[store.name] = {};
       this.models.forEach(shoes=>{
-	console.log(store);
 	this.state.statistics[store.name][shoes.name]= -1
 	  store.store_products.forEach( product =>{
 	    if(product.name==shoes.name){
@@ -72,7 +71,6 @@ class Dashboard extends Component {
   }
 
   handleData = messageData =>{
-    console.log( messageData);
     var inventory_json = JSON.parse(messageData);
     var store = inventory_json['store']
     var model = inventory_json['model']
@@ -95,9 +93,9 @@ class Dashboard extends Component {
       <Container>
 	<Typography variant="h3">Dashboard</Typography>
 
-<p>	<span class="success">Good Stock</span>
-	<span class="warning">In transit</span>
-	<span class="alert">Low stock</span></p>
+<p>	<span class="box success">Good Stock</span>
+	<span class="box warning">In transit</span>
+	<span class="box alert">Low stock</span></p>
 	<Websocket
       url={WEBSOCKET_URL}
       onMessage={this.handleData}

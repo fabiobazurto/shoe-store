@@ -57,7 +57,7 @@
     text-align: left;
 }
 
-span {
+span.box {
     padding: 16px;
     height: 10px;
     width: 100px;

@@ -42,9 +42,15 @@ export default class Transfer extends Component {
 
 
   onSourceChange = e => {
+    const store_id = e.target.value;
     this.setState({
-      selected_source: e.target.value
+      selected_source: store_id
     });
+
+      this.state.stores.forEach((store)=>{
+	  if (store.id = store_id)
+	          this.setState({ products: store.store_products });
+      });
   };
 
   onDestinationChange = e => {
@@ -73,7 +79,6 @@ export default class Transfer extends Component {
       product_id: this.state.selected_product,
       units: this.state.selected_units
     };
-    console.log(payload);
     axios.post(API_BASE_URL + '/inventory/transfer',payload).then( res => {
       alert('Transfer was successfully');
 
@@ -94,20 +99,10 @@ export default class Transfer extends Component {
     const stores = this.state.stores;
     const products = this.state.products;
 
-    var ws = new WebSocket('ws://localhost:8080/');
-    ws.onopen = function(e) {
-      ws.send("My name is Joddddhn");
-    };
-    ws.onmessage = function(event) {
-      var line = event.data; // get line from websocket event
-      console.log(line);
-    };
-
-    
     return (
       <Container>
 	<Typography variant="h3">Transfer form</Typography>
-	<div className='align-left'>
+	<div className='center'>
 	<form onSubmit={this.handleSubmit}>
 	<p>
 	<label> Source Store</label><br/>
@@ -144,10 +139,10 @@ export default class Transfer extends Component {
 
 	<p>
 	<label>Units</label><br/>
-	<NumericInput name="units"  onChange={(value) => this.onUnitsChange(value)} />
+	    <NumericInput name="units"  onChange={(value) => this.onUnitsChange(value)} value={this.state.selected_units}/>
 	</p>
 
-        <Button variant="contained" color="success">Transfer </Button>
+            <Button variant="contained" color="primary" type="submit">Transfer </Button>
 	</form>
 	</div>
 	</Container>
