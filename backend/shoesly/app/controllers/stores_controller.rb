@@ -6,7 +6,8 @@ class StoresController < ApplicationController
   def index
     @stores = Store.includes(:store_products)
     json_docs = @stores.map{|store|
-      { name: store.name,
+      { id: store.id,
+        name: store.name,
         has_stock_problems: store.has_stock_problems,
         store_products: store.store_products.map{ |products|
           { name: products.product.name, stock: products.stock }

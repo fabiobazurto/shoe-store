@@ -69,6 +69,7 @@ class Dashboard extends Component {
   }
 
   handleData = messageData =>{
+    console.log( messageData);
     var inventory_json = JSON.parse(messageData);
     var store = inventory_json['store']
     var model = inventory_json['model']

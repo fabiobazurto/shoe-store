@@ -17,7 +17,10 @@ class Inventory
         raise ActiveRecord::Rollback unless outcome
       end
     end
-
+    source_product.reload
+    destination_product.reload
+    # Websocket.send({store: source.name, model: product.name, inventory: source_product })
+    # Websocket.send({store: destination.name, model: product.name, inventory: destination_product })    
     outcome
   end
 end
