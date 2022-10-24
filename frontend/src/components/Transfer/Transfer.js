@@ -1,17 +1,20 @@
-import React, { useState, Component } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
-import { API_BASE_URL, WEBSOCKET_URL} from "./../../constants";
+import { API_BASE_URL} from "./../../constants";
 
 import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import NumericInput from 'react-numeric-input';
+
+import {
+  Typography,
+  Button
+} from "@material-ui/core";
+
 
 import { StoreService } from './../../models/store';
 import { ProductService } from './../../models/product';
 
-class About extends Component {
+export default class Transfer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,11 +31,11 @@ class About extends Component {
   }
 
   componentDidMount(){
-    var response = StoreService.all_records().then( res => {
+    StoreService.all_records().then( res => {
       this.setState({ stores:  res.data});
     });
 
-    var response = ProductService.all_records().then( res => {
+    ProductService.all_records().then( res => {
       this.setState({ products:  res.data});
     });
   }
@@ -103,6 +106,7 @@ class About extends Component {
     
     return (
       <Container>
+	<Typography variant="h3">Transfer form</Typography>
 	<div className='align-left'>
 	<form onSubmit={this.handleSubmit}>
 	<p>
@@ -143,7 +147,7 @@ class About extends Component {
 	<NumericInput name="units"  onChange={(value) => this.onUnitsChange(value)} />
 	</p>
 
-        <input type="submit" value="Submit" />
+        <Button variant="contained" color="success">Transfer </Button>
 	</form>
 	</div>
 	</Container>
@@ -151,4 +155,4 @@ class About extends Component {
   }
 }
 
-export default About;
+

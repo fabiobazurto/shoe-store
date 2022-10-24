@@ -6,6 +6,10 @@ import XgTableCollapsible from './../XgTable/XgTableCollapsible';
 import Websocket from "react-websocket";
 import { API_BASE_URL, WEBSOCKET_URL} from "./../../constants";
 
+import {
+  Typography
+} from "@material-ui/core";
+
 
 //model
 import { StoreShoeStock } from './../../models/store_shoe_stock';
@@ -78,7 +82,9 @@ class Dashboard extends Component {
       this.state.statistics[store][model] = inventory;
     }
     else{
-      this.state.statistics[store] = { "${model}": inventory };
+      var json_model = {};
+      json_model[model] = inventory
+      this.state.statistics[store] = json_model;
     }
     this.format_response_data();
   }
@@ -87,6 +93,11 @@ class Dashboard extends Component {
   render(){
     return (
       <Container>
+	<Typography variant="h3">Dashboard</Typography>
+
+<p>	<span class="success">Good Stock</span>
+	<span class="warning">In transit</span>
+	<span class="alert">Low stock</span></p>
 	<Websocket
       url={WEBSOCKET_URL}
       onMessage={this.handleData}

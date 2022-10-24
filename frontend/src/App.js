@@ -5,27 +5,15 @@ import { makeStyles, createMuiTheme } from "@material-ui/core/styles";
 import Container from '@material-ui/core/Container';
 import { ThemeProvider } from "@material-ui/styles";
 import blue from "@material-ui/core/colors/blue";
-import {
-  Avatar,
-  Modal,
-  Backdrop,
-  Fade,
-  Typography,
-  Box,
-  Button,
-  Paper,
-  Tabs,
-  Tab,
-} from "@material-ui/core";
 
 //Routing
 import { Route, Routes } from "react-router-dom";
 
 //Components
 import Nav from "./components/Nav/Nav";
-import About from './components/About/About';
+import Transfer from './components/Transfer/Transfer';
 import Dashboard from './components/Dashboard/Dashboard';
-
+import Log from './components/Log/Log';
 
 function App() {
   return (
@@ -33,7 +21,8 @@ function App() {
       <Nav />
       <Routes>
       <Route path="/" element={<Dashboard />} />
-      <Route path="/transfer" element={<About />} />      
+      <Route path="/transfer" element={<Transfer />} />
+      <Route path="/logs" element={<Log />} />	  
       </Routes>
       </div>
   ); 

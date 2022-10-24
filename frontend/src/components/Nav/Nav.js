@@ -16,6 +16,9 @@ const Nav = () => {
       <NavLink style={navLinkStyles} to="/transfer">
         Transfer Stock
       </NavLink>
+      <NavLink style={navLinkStyles} to="/logs">
+        Logs
+      </NavLink> 
     </nav>
   );
 };

@@ -13,6 +13,10 @@ import TableRow from '@material-ui/core/TableRow';
 //import KeyboardArrowDownIcon from '@material-ui/icons-material/KeyboardArrowDown';
 //import KeyboardArrowUpIcon from '@material-ui/icons-material/KeyboardArrowUp';
 
+import {
+  Typography,
+  Button
+} from "@material-ui/core";
 
 //model
 import { StoreShoeStock } from './../../models/store_shoe_stock';
@@ -39,7 +43,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 
-export default function StoresBoard() {
+export default function Log() {
   const [rowse, setRowse] = useState([]);
 
   const [statistics, setStatistics] = useState({});  
@@ -100,6 +104,7 @@ export default function StoresBoard() {
   
   return (
     <Container>
+	<Typography variant="h3">Logs</Typography>
     <TableContainer >
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>

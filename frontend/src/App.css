@@ -56,3 +56,21 @@
 .align-left{
     text-align: left;
 }
+
+span {
+    padding: 16px;
+    height: 10px;
+    width: 100px;
+    margin: 2px;
+}
+.success {
+    background-color: green;
+    
+}
+.warning {
+    background-color: yellow;
+    
+}
+.alert {
+    background-color: red;  
+}  
