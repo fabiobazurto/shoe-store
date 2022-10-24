@@ -11,10 +11,10 @@ const Nav = () => {
   return (
     <nav className="primary-nav">
       <NavLink style={navLinkStyles} to="/">
-        Log
-      </NavLink>
-      <NavLink style={navLinkStyles} to="/Dashboard">
         Dashboard
+      </NavLink>
+      <NavLink style={navLinkStyles} to="/transfer">
+        Transfer Stock
       </NavLink>
     </nav>
   );

@@ -5,6 +5,14 @@
 class StoresController < ApplicationController
   def index
     @stores = Store.includes(:store_products)
-    render json: @stores.to_json(include: { store_products: { include: :product } })
+    json_docs = @stores.map{|store|
+      { name: store.name,
+        has_stock_problems: store.has_stock_problems,
+        store_products: store.store_products.map{ |products|
+          { name: products.product.name, stock: products.stock }
+        }
+      }
+    }
+    render json: json_docs # @stores.to_json(include: { store_products: { include: :product } })
   end
 end

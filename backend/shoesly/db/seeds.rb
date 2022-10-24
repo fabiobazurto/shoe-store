@@ -8,17 +8,16 @@ Product.delete_all
 end
 
 %w[ADERI MIRIRA CAELAN BUTAUD SCHOOLER SODANO MCTYRE CADAUDIA RASIEN WUMA GRELIDIEN CADEVEN SEVIDE ELOILLAN BEODA VENDOGNUS ABOEN ALALIWEN GREG BOZZA].each do |product_name|
-  Product.create(name: product_name, total_units: [10,50,100].sample, point_of_refill: 25)
+  Product.create(name: product_name, total_units: [500,1000].sample, point_of_refill: 25)
 end
 
-RANDOMNESS = Array(1..7)
 
 # For each store, I'll assign a stock on the stock
 Store.all.each do |store|
-  RANDOMNESS.sample.times do
-    product = Product.where.not(id: store.products.pluck(:id)).first
+  Product.all.each do |product|
+  
     store.store_products.build(product: product,
-                               stock: (product.total_units * 0.3).to_i,
+                               stock: (product.total_units * 0.5).to_i,
                                point_of_refill: Inventory::DEFAULT_MINIMUM_STOCK).save
   end
 end

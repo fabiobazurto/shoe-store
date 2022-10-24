@@ -23,7 +23,7 @@ import { Route, Routes } from "react-router-dom";
 
 //Components
 import Nav from "./components/Nav/Nav";
-import StoresBoard from './components/StoresBoard/StoresBoard';
+import About from './components/About/About';
 import Dashboard from './components/Dashboard/Dashboard';
 
 
@@ -32,11 +32,11 @@ function App() {
     <div className="App">
       <Nav />
       <Routes>
-      <Route path="/" element={<StoresBoard />} />
-      <Route path="/dashboard" element={<Dashboard />} />      
+      <Route path="/" element={<Dashboard />} />
+      <Route path="/transfer" element={<About />} />      
       </Routes>
       </div>
-  );
+  ); 
 }
 
 export default App;

@@ -81,7 +81,7 @@ function Row(props: { row: ReturnType<typeof StoreShoeStock > }) {
    		    <TableRow className={cssStock(childRow)} data-stock={childRow.inventory}>
 		      <TableCell align="left">{childRow.model}</TableCell>
                       <TableCell align="right">
-                      { (childRow.inventory==-1)? 'Updating...':childRow.inventory }
+                      { (childRow.inventory==-1)? 'Not available...':childRow.inventory }
                       </TableCell>
                     </TableRow>
                   ))}

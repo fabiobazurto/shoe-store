@@ -1,105 +1,100 @@
-import React, { useEffect, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
+import axios from 'axios';
 import { styled } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import XgTableCollapsible from './../XgTable/XgTableCollapsible';
+import Websocket from "react-websocket";
+import { API_BASE_URL, WEBSOCKET_URL} from "./../../constants";
+
 
 //model
 import { StoreShoeStock } from './../../models/store_shoe_stock';
 import { TableRecord } from './../../models/table_record';
+import { StoreService } from './../../models/store';
+import { ProductService } from './../../models/product';
 
-const websocket_url = "ws://127.0.0.1:8080/";
+class Dashboard extends Component {
 
-export default function Dashboard() {
+  // State
+  constructor(props) {
+    super(props);
+    this.state = {
+      rows: [],
+      statistics: {},
+      columns: ['Store', 'Product', 'Total'],
+    };
 
-  const [rows, setRows] = useState([]);
-
-  const [statistics, setStatistics] = useState({});  
-  // Used to detect websocket state
-  const [serverMessage, setServerMessage] = useState("");
-  const [webSocketReady, setWebSocketReady] = useState(false);
+    this.models=[];
+    this.stores=[];
+    var response = StoreService.all_records().then( res => {
+      this.stores =  res.data;
+      var response = ProductService.all_records().then( res => {
+	this.models =  res.data;
+	this.initialize_data();
+      });
+    });
+  }
   
-  //using useState so when socket updates it triggers a component rerender
-  const [webSocket, setWebSocket] = useState(new WebSocket(websocket_url));
-
-  const columns = ['Store', 'Product', 'Total']
+  initialize_data(){
+    this.stores.forEach( store=>{
+      this.state.statistics[store.name] = {};
+      this.models.forEach(shoes=>{
+	console.log(store);
+	this.state.statistics[store.name][shoes.name]= -1
+	  store.store_products.forEach( product =>{
+	    if(product.name==shoes.name){
+	      	this.state.statistics[store.name][shoes.name]= product.stock
+	    }
+	  });
+	console.log(this.state.statistics[store.name][shoes.name]);
+      });
+    });
+    this.format_response_data();
+  }  
   
-  const stores = ['ALDO Centre Eaton', 'ALDO Destiny USA Mall', 'ALDO Pheasant Lane Mall', 'ALDO Holyoke Mall', 'ALDO Maine Mall', 'ALDO Crossgates Mall', 'ALDO Burlington Mall', 'ALDO Solomon Pond Mall', 'ALDO Auburn Mall', 'ALDO Waterloo Premium Outlets']
-
-  const models = ['ADERI', 'MIRIRA', 'CAELAN', 'BUTAUD', 'SCHOOLER', 'SODANO', 'MCTYRE', 'CADAUDIA', 'RASIEN', 'WUMA', 'GRELIDIEN', 'CADEVEN', 'SEVIDE', 'ELOILLAN', 'BEODA', 'VENDOGNUS', 'ABOEN', 'ALALIWEN', 'GREG', 'BOZZA' ]  
-  
-  const inventory_data = function(){
+  format_response_data(){
     var local_rows= [];
-
-    Object.keys(statistics).map(function(store){
+    Object.keys(this.state.statistics).forEach(store=>{
       var has_stock_problems = false;      
       var table_record = new TableRecord(store);
-      Object.keys(statistics[store]).map(function(model){
-	table_record.child_rows.push(new StoreShoeStock(store,model, statistics[store][model]));
-	if(statistics[store][model]<10 && statistics[store][model]!=-1 && !has_stock_problems)
+      Object.keys(this.state.statistics[store]).forEach(model=>{
+	table_record.child_rows.push(new StoreShoeStock(store,model, this.state.statistics[store][model]));
+	if(this.state.statistics[store][model]<10 && this.state.statistics[store][model]!=-1 && !has_stock_problems)
 	  has_stock_problems = true;
       });
       table_record.bad_stock = has_stock_problems;
       local_rows.push(table_record);
     });
-    setRows(local_rows);
+    this.setState({ rows:  local_rows});
   }
 
-  const initialize_data = function(){
-    stores.map(function(store){
-      statistics[store] = {};
-       models.map(function(shoes){
-	 statistics[store][shoes]= -1;
-      });
-    });
-    inventory_data();
+  handleData = messageData =>{
+    var inventory_json = JSON.parse(messageData);
+    var store = inventory_json['store']
+    var model = inventory_json['model']
+    var inventory =  inventory_json['inventory']
+
+    if(this.state.statistics[store]){
+      this.state.statistics[store][model] = inventory;
+    }
+    else{
+      this.state.statistics[store] = { "${model}": inventory };
+    }
+    this.format_response_data();
   }
   
 
-  useEffect(() => {
-
-    initialize_data();
-    
-    webSocket.onopen = (event) => {
-      setWebSocketReady(true);
-    };
-
-    webSocket.onmessage = function (event) {
-      var inventory_json = JSON.parse(event.data);
-      var store = inventory_json['store']
-      var model = inventory_json['model']
-      var inventory =  inventory_json['inventory']
-
-      if(statistics[store]){
-	statistics[store][model] = inventory;
-      }
-      else{
-	statistics[store] = { "${model}": inventory };
-      }
-      inventory_data();
-    };
-
-    webSocket.onclose = function (event) {
-      setWebSocketReady(false);
-      console.log('Reconnecting socket');
-      setTimeout(() => {
-        setWebSocket(new WebSocket(websocket_url));
-      }, 1000);
-    };
-
-    webSocket.onerror = function (err) {
-      console.log('Socket encountered error: ', err.message, 'Closing socket');
-      setWebSocketReady(false);
-      webSocket.close();
-    };
-
-    return () => {
-       webSocket.close();
-    };
-  }, [webSocket]);
-  
-  return (
-    <Container>
-      <XgTableCollapsible rows={rows} cols={columns}/>
-    </Container>
-  );
+  render(){
+    return (
+      <Container>
+	<Websocket
+      url={WEBSOCKET_URL}
+      onMessage={this.handleData}
+        />
+	<XgTableCollapsible rows={this.state.rows} cols={this.state.columns}/>
+	</Container>
+    );
+  }
 }
+
+export default Dashboard;
