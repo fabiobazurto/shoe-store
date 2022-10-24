@@ -19,8 +19,11 @@ class Inventory
     end
     source_product.reload
     destination_product.reload
-    # Websocket.send({store: source.name, model: product.name, inventory: source_product })
-    # Websocket.send({store: destination.name, model: product.name, inventory: destination_product })    
+#    Message.new(  body:"{\"store\": \"#{source.name}\",\"model\": \"#{product.name}\", \"inventory\": \"#{source_product.stock}\" }"  , delivered: false).save
+ #   Message.new(  body:"{\"store\": \"#{destination.name}\",\"model\": \"#{product.name}\", \"inventory\": \"#{destination_product.stock}\" }"  , delivered: false).save
+
+     Websocket.send({store: source.name, model: product.name, inventory: source_product })
+     Websocket.send({store: destination.name, model: product.name, inventory: destination_product })    
     outcome
   end
 end

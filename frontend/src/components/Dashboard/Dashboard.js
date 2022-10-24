@@ -46,7 +46,6 @@ class Dashboard extends Component {
 	      	this.state.statistics[store.name][shoes.name]= product.stock
 	    }
 	  });
-	console.log(this.state.statistics[store.name][shoes.name]);
       });
     });
     this.format_response_data();

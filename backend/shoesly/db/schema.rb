@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_23_185910) do
+ActiveRecord::Schema.define(version: 2022_10_24_053159) do
+
+  create_table "messages", charset: "utf8mb4", force: :cascade do |t|
+    t.string "body"
+    t.boolean "delivered"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "products", charset: "utf8mb4", force: :cascade do |t|
     t.string "name", null: false

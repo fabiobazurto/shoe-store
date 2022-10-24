@@ -1,6 +1,6 @@
 import React, { useState, Component } from 'react';
 import axios from 'axios';
-import { API_BASE_URL} from "./../../constants";
+import { API_BASE_URL, WEBSOCKET_URL} from "./../../constants";
 
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,7 +20,7 @@ class About extends Component {
       selected_product: 0,
       selected_units: 0,
       stores:[],
-      products:[]
+      products:[],
     };
 
 //    this.handleChange = this.handleChange.bind(this);
@@ -72,8 +72,15 @@ class About extends Component {
     };
     console.log(payload);
     axios.post(API_BASE_URL + '/inventory/transfer',payload).then( res => {
+      alert('Transfer was successfully');
+
+      this.setState({selected_source:''});
       
-      alert('Transfer was successful ');
+      this.setState({selected_destination:''});
+      
+      this.setState({selected_product:''});
+      
+      this.setState({selected_units:''});
       // reset form
     });
 
@@ -83,6 +90,17 @@ class About extends Component {
   render() {
     const stores = this.state.stores;
     const products = this.state.products;
+
+    var ws = new WebSocket('ws://localhost:8080/');
+    ws.onopen = function(e) {
+      ws.send("My name is Joddddhn");
+    };
+    ws.onmessage = function(event) {
+      var line = event.data; // get line from websocket event
+      console.log(line);
+    };
+
+    
     return (
       <Container>
 	<div className='align-left'>

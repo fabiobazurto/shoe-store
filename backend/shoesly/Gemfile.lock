@@ -74,6 +74,7 @@ GEM
     database_cleaner-core (2.0.1)
     diff-lcs (1.5.0)
     erubi (1.11.0)
+    eventmachine (1.2.7)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
@@ -81,6 +82,9 @@ GEM
       railties (>= 5.0.0)
     faker (2.23.0)
       i18n (>= 1.8.11, < 2)
+    faye-websocket (0.11.1)
+      eventmachine (>= 0.12.0)
+      websocket-driver (>= 0.5.1)
     ffi (1.15.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
@@ -181,8 +185,10 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
   database_cleaner
+  eventmachine
   factory_bot_rails
   faker
+  faye-websocket
   listen (~> 3.3)
   mysql2 (~> 0.5)
   puma (~> 5.0)
