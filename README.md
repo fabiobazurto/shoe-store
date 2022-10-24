@@ -6,7 +6,9 @@
 
 Configure your environment variables by editing ./frontend/src/contant.js file
 
+
 APP_API_BASE_URL  # You Api base url. By default http://localhost:3000/api/v1
+
 APP_WEBSOCKET_URL # You websocket url. By default  ws://127.0.0.1:8080/
 
 Run the following commands:
